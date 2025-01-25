@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Japanese Vocabulary Quiz</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f9;
+            color: #333;
+        }
+        .quiz-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .question {
+            margin-bottom: 20px;
+        }
+        .answers {
+            list-style-type: none;
+            padding: 0;
+        }
+        .answers li {
+            margin-bottom: 10px;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 10px;
+            border-radius: 4px;
+        }
+        .result.success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .result.fail {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+    </style>
+</head>
+<body>
+    <div class="quiz-container">
+        <h1>Japanese Vocabulary Quiz</h1>
+        <form id="quiz-form">
+
+            <div class="question">
+                <p>1. Comment dit-on 'train' en japonais ?</p>
+                <ul class="answers">
+    <li><label><input type="radio" name="q1" value="densha"> densha</label></li><li><label><input type="radio" name="q1" value="jitensha"> jitensha</label></li><li><label><input type="radio" name="q1" value="hikouki"> hikouki</label></li></ul></div>
+            <div class="question">
+                <p>2. Comment dit-on 'chien' en japonais ?</p>
+                <ul class="answers">
+    <li><label><input type="radio" name="q2" value="inu"> inu</label></li><li><label><input type="radio" name="q2" value="neko"> neko</label></li><li><label><input type="radio" name="q2" value="uma"> uma</label></li></ul></div>
+            <div class="question">
+                <p>3. Quelle est la traduction de 'rouge' en japonais ?</p>
+                <ul class="answers">
+    <li><label><input type="radio" name="q3" value="aka"> aka</label></li><li><label><input type="radio" name="q3" value="ao"> ao</label></li><li><label><input type="radio" name="q3" value="shiro"> shiro</label></li></ul></div>
+            <div class="question">
+                <p>4. Comment dit-on 'manger' en japonais (forme polie) ?</p>
+                <ul class="answers">
+    <li><label><input type="radio" name="q4" value="tabemasu"> tabemasu</label></li><li><label><input type="radio" name="q4" value="nomimasu"> nomimasu</label></li><li><label><input type="radio" name="q4" value="arukimasu"> arukimasu</label></li></ul></div>
+            <div class="question">
+                <p>5. Comment dit-on 'lundi' en japonais ?</p>
+                <ul class="answers">
+    <li><label><input type="radio" name="q5" value="getsuyoubi"> getsuyoubi</label></li><li><label><input type="radio" name="q5" value="kayoubi"> kayoubi</label></li><li><label><input type="radio" name="q5" value="nichiyoubi"> nichiyoubi</label></li></ul></div>
+            <button type="button" onclick="checkAnswers()">Soumettre</button>
+        </form>
+        <div id="result" class="result" style="display: none;"></div>
+    </div>
+    <script>
+        function checkAnswers() {
+            const answers = {
+                q1: "densha",
+                q2: "inu",
+                q3: "aka",
+                q4: "tabemasu",
+                q5: "getsuyoubi",
+
+            };
+            let score = 0;
+            const form = document.getElementById('quiz-form');
+            const formData = new FormData(form);
+
+            for (const [question, correctAnswer] of Object.entries(answers)) {
+                if (formData.get(question) === correctAnswer) {
+                    score++;
+                }
+            }
+
+            const result = document.getElementById('result');
+            result.style.display = 'block';
+
+            if (score === Object.keys(answers).length) {
+                result.textContent = `Félicitations ! Vous avez répondu correctement à toutes les questions. Score : ${score}/${Object.keys(answers).length}`;
+                result.className = 'result success';
+            } else {
+                result.textContent = `Vous avez obtenu ${score}/${Object.keys(answers).length}. Essayez à nouveau !`;
+                result.className = 'result fail';
+            }
+        }
+    </script>
+</body>
+</html>
