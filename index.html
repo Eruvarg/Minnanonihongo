@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exercices Japonais - Quiz Dynamique</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 text-gray-800">
+    <div class="max-w-2xl mx-auto p-6 bg-white rounded-lg shadow-md mt-10">
+        <h1 class="text-2xl font-bold text-center text-blue-600">Exercices Japonais - Quiz</h1>
+        <p class="text-center text-sm text-gray-500 mt-2">Les réponses sont en romaji.</p>
+
+        <form id="quiz-form" class="mt-6 space-y-6"></form>
+
+        <button type="button" onclick="checkAnswers()" class="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600">Soumettre</button>
+
+        <div id="result" class="mt-6 p-4 rounded hidden"></div>
+    </div>
+
+    <script>
+        const quizData = [
+            {
+                section: "Traduis les phrases en français",
+                questions: [
+                    "このばしょはおおきいです。",
+                    "このセーターはやすいです。",
+                    "くだものはたかいです。",
+                    "こののみものはつめたいです。",
+                    "このまちはしずかです。"
+                ],
+                type: "text",
+                answers: [
+                    "Cet endroit est grand",
+                    "Ce pull est bon marché",
+                    "Les fruits sont chers",
+                    "Cette boisson est froide",
+                    "Cette ville est calme"
+                ]
+            },
+            {
+                section: "Choix multiple (Adverbes)",
+                questions: [
+                    "わたしは _______ えいがをみます。",
+                    "あなたは _______ りょこうをしますか？",
+                    "このまちは _______ しずかです。"
+                ],
+                type: "multiple",
+                options: [
+                    ["とても", "あまり", "よく"],
+                    ["よく", "ときどき", "すこし"],
+                    ["とても", "ぜんぜん", "あまり"]
+                ],
+                answers: ["c", "a", "a"]
+            },
+            {
+                section: "Traduis les mots",
+                questions: [
+                    "たべもの",
+                    "のみもの",
+                    "やさい",
+                    "くだもの",
+                    "たのしい"
+                ],
+                type: "text",
+                answers: ["nourriture", "boisson", "légumes", "fruits", "amusant"]
+            },
+            {
+                section: "Compléter avec la bonne particule",
+                questions: [
+                    "わたし____がっこうにいきます。",
+                    "ともだち____えいがをみました。",
+                    "ほん____つくえのうえにあります。",
+                    "にほん____たべものがすきです。",
+                    "あした____しけんがあります。"
+                ],
+                type: "text",
+                answers: ["は", "と", "は", "の", "は"]
+            },
+            {
+                section: "Trouver l'antonyme (réponse en romaji)",
+                questions: [
+                    "べんり",
+                    "たかい",
+                    "かんたん",
+                    "あたらしい",
+                    "ひろい"
+                ],
+                type: "text",
+                answers: ["fuben", "yasui", "muzukashii", "furui", "semai"]
+            }
+        ];
+
+        const form = document.getElementById('quiz-form');
+
+        quizData.forEach((section, sectionIndex) => {
+            const sectionTitle = document.createElement('h2');
+            sectionTitle.className = "text-lg font-semibold text-gray-700";
+            sectionTitle.textContent = section.section;
+            form.appendChild(sectionTitle);
+
+            section.questions.forEach((question, questionIndex) => {
+                const questionWrapper = document.createElement('div');
+                questionWrapper.className = "mt-4";
+
+                const label = document.createElement('label');
+                label.className = "block text-sm";
+                label.textContent = `${sectionIndex + 1}.${questionIndex + 1} ${question}`;
+
+                questionWrapper.appendChild(label);
+
+                if (section.type === "text") {
+                    const input = document.createElement('input');
+                    input.type = "text";
+                    input.name = `q${sectionIndex + 1}_${questionIndex + 1}`;
+                    input.className = "w-full mt-2 p-2 border rounded";
+                    questionWrapper.appendChild(input);
+                } else if (section.type === "multiple") {
+                    section.options[questionIndex].forEach((option, optionIndex) => {
+                        const optionWrapper = document.createElement('div');
+                        optionWrapper.className = "mt-2";
+
+                        const input = document.createElement('input');
+                        input.type = "radio";
+                        input.name = `q${sectionIndex + 1}_${questionIndex + 1}`;
+                        input.value = String.fromCharCode(97 + optionIndex);
+                        input.className = "mr-2";
+
+                        const optionLabel = document.createElement('label');
+                        optionLabel.textContent = `${String.fromCharCode(97 + optionIndex)}) ${option}`;
+
+                        optionWrapper.appendChild(input);
+                        optionWrapper.appendChild(optionLabel);
+                        questionWrapper.appendChild(optionWrapper);
+                    });
+                }
+
+                form.appendChild(questionWrapper);
+            });
+        });
+
+        function checkAnswers() {
+            let score = 0;
+            let totalQuestions = 0;
+
+            quizData.forEach((section, sectionIndex) => {
+                section.answers.forEach((answer, questionIndex) => {
+                    const questionName = `q${sectionIndex + 1}_${questionIndex + 1}`;
+                    const userAnswer = document.querySelector(`[name='${questionName}']`).value?.trim().toLowerCase();
+
+                    if (section.type === "text" && userAnswer === answer.toLowerCase()) {
+                        score++;
+                    } else if (section.type === "multiple" && userAnswer === answer) {
+                        score++;
+                    }
+
+                    totalQuestions++;
+                });
+            });
+
+            const result = document.getElementById('result');
+            result.textContent = `Score : ${score}/${totalQuestions}`;
+            result.className = "mt-6 p-4 rounded " + (score === totalQuestions ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800");
+            result.style.display = "block";
+        }
+    </script>
+</body>
+</html>
